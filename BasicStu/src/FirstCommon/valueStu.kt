@@ -8,6 +8,16 @@ import javax.sound.sampled.Line
  * @date 2022-03-23 15:20
  * @description：三尺秋水尘不染
  */
+
+
+fun vars(vararg v:Int){
+    for(vt in v){
+        print(vt)
+    }
+}
+
+// 测试
+
 // TODO kotlin 变量和内置数据类型
 fun main() {
         //TODO 声明变量
@@ -35,5 +45,5 @@ fun main() {
     print(info)
     var age=99
     println(age)
-
+    vars(1,2,3,4,5)  // 输出12345
 }
