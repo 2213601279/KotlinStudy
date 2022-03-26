@@ -22,8 +22,6 @@ newLanguage study
 
 认识规范安卓版本:
 
-![image-20220322205640392](https://gitee.com/jade_flute/stu-images/raw/master/image-20220322205640392.png)
-
 # 2.学习Kotlin语法
 
 > [安卓 Kotlin 基础知识课程 |安卓开发人员 (google.cn)](https://developer.android.google.cn/courses/android-basics-kotlin/course?hl=zh-cn)
@@ -32,7 +30,175 @@ newLanguage study
 
 > [基本类型 · Kotlin 官方文档 中文版 (kotlincn.net)](https://book.kotlincn.net/text/basic-types.html#字符串模板)
 
-### 2.1.重点来讲讲异常
+### 2.1来说说变量和参数
+
+>可变长参数函数
+>
+>函数的变长参数可以用 **`vararg`** 关键字进行标识：
+
+```kotlin
+fun vars(vararg v:Int){
+    for(vt in v){
+        print(vt)
+    }
+}
+
+// 测试
+fun main(args: Array<String>) {
+    vars(1,2,3,4,5)  // 输出12345
+}
+```
+
+### 2.1.1匿名函数的学习
+
+#### **lambda表达式与局部函数的区别**
+
+>[ kotlin - lambda表达式_guojingbu的博客-CSDN博客](https://blog.csdn.net/guojingbu/article/details/121185370)
+
+- Lambda 表达式总是被大括号括着
+- 定义 Lambda 表达式不需要 fun 关键字，无须指定函数名。
+- 形参列表（如果有的话）在->之前声明，参数类型可以省略。
+- 函数体（Lambda 表达式执行体）放在->之后。
+- 函数的最后一个表达式自动被作为Lambda 表达式的返回值，无须使用 return 关键字。
+
+```kotlin
+val/var 变量名: (参数的类型，参数类型，...) -> 返回值类型 = {参数1，参数2，... -> 操作参数的代码 }
+可等价于
+ // 此种写法：即表达式的返回值类型会根据操作的代码自推导出来。
+val/var 变量名 = { 参数1:类型，参数2:类型, ... -> 操作参数的代码 }
+
+```
+
+##### 当有参数的时候
+
+```kotlin
+// 源代码
+fun test(a : Int , b : Int) : Int{
+    return a + b
+}
+
+// lambda
+val test1 : (Int , Int) -> Int = {a , b -> a + b}
+// 或者
+//推荐使用该种方法来写可以为无法判断参数类型的时候来写
+val test2 = {a : Int , b : Int -> a + b}
+
+// 调用
+test(3,5) => 结果为：8
+
+```
+
+##### 作为方法的参数的话
+
+```kotlin
+// lambda
+fun test(a : Int , b : ( Int ,Int) -> Int) : Int{
+    return a + b.invoke(3,5)
+}
+//调用
+test(10,{ num1: Int, num2: Int ->  num1 + num2 })
+//等价于:
+test(10){ num1: Int, num2: Int ->  num1 + num2 } 
+
+```
+
+- 从上面的代码可以看出在如果函数的最后一个参数是一个lambda表达式，可以把lambda表达式提出到括号外面。
+- b.invoke()等价于b()
+- 如果一个lambda表达式作为一个函数的参数时，定义的时候只是指定了这个表达式的参数类型和返回值，所以我们在调用高阶函数的时候要传入该Lambda表达式具体的实现。
+- **由于lambda表达式只一个功能灵活的代码块，所以我们完全可以把它赋值给一个变量或直接调用lambda表达式。**示例代码如下：
+
+```kotlin
+fun main(args: Array<String>) {
+    //定义一个 Lambda 表达式，并在它后面添加括号来调用该 Lambda 表达式
+    val result = { base: Int, exponent: Int ->
+        var result = 1
+        for (i in 1..exponent) {
+            result *= base
+        }
+        result
+    }(4, 3)
+    println(result) //输出 64
+}
+
+```
+
+lambda表达式与匿名函数的return
+
+匿名函数只是一个没有名字的函数，本质上还是一个函数，因此匿名函数的return返回的是匿名函数本身。
+lambda表达式他只是一个代码块return返回的是它所在的函数，而不是lambda表达式。 例如下面代码：
+
+```kotlin
+fun main(args: Array<String>) {
+    var list = listOf(1,2,3,4,5)
+    //匿名函数
+    list.forEach(fun(value){
+        println("元素为：${value}")
+        return
+    })
+    //lambda表达式
+    list.forEach {
+        println("元素为：$​{it}")
+        return
+    }
+}
+```
+
+
+
+lambda表达式打印结果如下：
+
+```bash
+元素为：1
+```
+
+匿名函数打印的结果：
+
+```bash
+元素为：1
+元素为：2
+元素为：3
+元素为：4
+元素为：5
+```
+
+从上面函数的打印结果可以验证，我们上面所说的结论，lambda表达式中的return直接返回它所在的函数。lambda表达式一般不写return，如果非得在lambda表达式中使用return语句来返回lambda表达式，可以使用如下方式：
+
+```kotlin
+list.forEach {
+    println("元素为：${it}")
+    return@forEach
+}
+```
+
+
+```kotlin
+
+```
+
+##### 使用 lambda 表达式来过滤（filter）与映射（map）集合：
+
+```kotlin
+//sampleStart
+    val fruits = listOf("banana", "avocado", "apple", "kiwifruit")
+    fruits
+      .filter { it.startsWith("a") }
+      .sortedBy { it }
+      .map { it.uppercase() }
+      .forEach { println(it) }
+//sampleEnd
+```
+
+来聊聊遇到的实际中,直接return 在lambda中会导致程序的异常终止
+
+```kotlin
+list.forEach {
+        println("元素为：${it}")
+    }
+```
+
+加上后后面的就不会执行了
+
+### 2.2.重点来讲讲异常
 
 #### 异常类
 
@@ -134,4 +300,137 @@ println(s)     // 在此已知“s”已初始化
 val x = null           // “x”具有类型 `Nothing?`
 val l = listOf(null)   // “l”具有类型 `List<Nothing?>
 ```
+
+这里介绍一下kotlin 的安全机制以及他独特的NULL检查机制
+
+### 2
+
+### 3.0 NULL检查机制
+
+Kotlin的空安全设计对于声明可为空的参数，在使用时要进行空判断处理，有两种处理方式，字段后加?像Java一样抛出空异常，另一种字段后加?可不做处理返回值为 `null`或者`?: `做空判断处理
+
+```kotlin
+fun parseInt(str: String): Int? {
+    return str.toIntOrNull()
+}
+
+//sampleStart
+fun printProduct(arg1: String, arg2: String) {
+    val x = parseInt(arg1)
+    val y = parseInt(arg2)
+
+    // 直接使用 `x * y` 会导致编译错误，因为它们可能为 null
+    if (x != null && y != null) {
+        // 在空检测后，x 与 y 会自动转换为非空值（non-nullable）
+        println(x * y)
+    }
+    else {
+        println("'$arg1' or '$arg2' is not a number")
+    }
+}
+//sampleEnd
+
+fun main() {
+    printProduct("6", "7")
+    printProduct("a", "7")
+    printProduct("a", "b")
+}
+```
+
+## 数据类
+
+> [数据类 · Kotlin 官方文档 中文版 (kotlincn.net)](https://book.kotlincn.net/text/data-classes.html)
+
+创建一些只保存数据的类是件寻常的事。 在这些类中，一些标准功能以及一些工具函数往往是由数据机械推导而来的。在 Kotlin 中，这叫做 *数据类* 并以 `data` 标记：
+
+```kotlin
+data class User(val name: String, val age: Int)
+```
+
+编译器自动从主构造函数中声明的所有属性导出以下成员：
+
+- `equals()`/`hashCode()` 对
+- `toString()` 格式是 `"User(name=John, age=42)"`
+- [`componentN()` 函数](https://book.kotlincn.net/text/destructuring-declarations.html) 按声明顺序对应于所有属性。
+- `copy()` 函数（见下文）
+
+为了确保生成的代码的一致性以及有意义的行为，数据类必须满足以下要求：
+
+- 主构造函数需要至少有一个参数。
+- 主构造函数的所有参数需要标记为 `val` 或 `var`。
+- 数据类不能是抽象、开放、密封或者内部的。
+
+此外，数据类成员的生成遵循关于成员继承的这些规则：
+
+- 如果在数据类体中有显式实现 `equals()`、 `hashCode()` 或者 `toString()`，或者这些函数在父类中有 `final` 实现，那么不会生成这些函数，而会使用现有函数。
+- 如果超类型具有 `open` 的 `componentN()` 函数并且返回兼容的类型， 那么会为数据类生成相应的函数，并覆盖超类的实现。如果超类型的这些函数由于签名不兼容或者是 final 而导致无法覆盖，那么会报错。
+- 不允许为 `componentN()` 以及 `copy()` 函数提供显式实现。
+
+数据类可以扩展其他类（示例请参见[密封类](https://book.kotlincn.net/text/sealed-classes.html)）。
+
+> 在 JVM 中，如果生成的类需要含有一个无参的构造函数，那么属性必须指定默认值。（参见[构造函数](https://book.kotlincn.net/text/classes.html#构造函数)）。
+>
+> <svg width="24" height="24" fill="#4dbb5f" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-9-9 9 9 0 0 1 9 9zM10.5 7.5A1.5 1.5 0 1 0 12 6a1.5 1.5 0 0 0-1.5 1.5zm-.5 3.54v1h1V18h2v-6a.96.96 0 0 0-.96-.96z"></path></svg>
+
+```kotlin
+data class User(val name: String = "", val age: Int = 0)
+```
+
+### 在类体中声明的属性
+
+请注意，对于那些自动生成的函数，编译器只使用在主构造函数内部定义的属性。 如需在生成的实现中排除一个属性，请将其声明在类体中：
+
+```kotlin
+data class Person(val name: String) {
+    var age: Int = 0
+}
+```
+
+在 `toString()`、 `equals()`、 `hashCode()` 以及 `copy()` 的实现中只会用到 `name` 属性， 并且只有一个 component 函数 `component1()`。虽然两个 `Person` 对象可以有不同的年龄， 但它们会视为相等。
+
+```kotlin
+data class Person(val name: String) {
+    var age: Int = 0
+}
+fun main() {
+//sampleStart
+    val person1 = Person("John")
+    val person2 = Person("John")
+    person1.age = 10
+    person2.age = 20
+//sampleEnd
+    println("person1 == person2: ${person1 == person2}")
+    println("person1 with age ${person1.age}: ${person1}")
+    println("person2 with age ${person2.age}: ${person2}")
+}
+```
+
+### 复制
+
+Use the `copy()` function to copy an object, allowing you to alter *some* of its properties while keeping the rest unchanged. The implementation of this function for the `User` class above would be as follows:
+
+```kotlin
+fun copy(name: String = this.name, age: Int = this.age) = User(name, age)
+```
+
+然后可以这样写：
+
+```kotlin
+val jack = User(name = "Jack", age = 1)
+val olderJack = jack.copy(age = 2)
+```
+
+### 数据类与解构声明
+
+为数据类生成的 *component 函数* 使它们可在[解构声明](https://book.kotlincn.net/text/destructuring-declarations.html)中使用：
+
+```kotlin
+val jane = User("Jane", 35)
+val (name, age) = jane
+println("$name, $age years of age") // 输出 "Jane, 35 years of age"
+```
+
+### 标准数据类
+
+标准库提供了 `Pair` 与 `Triple` 类。尽管在很多情况下具名数据类是更好的设计选择， 因为它们通过为属性提供有意义的名称使代码更具可读性。
 
