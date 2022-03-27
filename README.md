@@ -1,5 +1,8 @@
 # KotlinStudy
 newLanguage study
+
+> 如果迷茫多一点的话就各自努力吧,顶峰再见了晨静
+
 # Android Studio 入门
 
 > 写在开头:
