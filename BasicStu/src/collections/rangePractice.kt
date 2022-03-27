@@ -15,6 +15,42 @@ for (x in 10 downTo 1) { …… }
 
  */
 
-fun main() {
+abstract class MyAbstractClass {
+    abstract fun doSomething()
+    abstract fun sleep()
+}
+///when表达式
+fun transform(color: String): Int {
+    return when (color) {
+        "Red" -> 0
+        "Green" -> 1
+        "Blue" -> 2
+        else -> throw IllegalArgumentException("Invalid color param value")
+    }
+}
 
+fun main() {
+    val myObject = object : MyAbstractClass() {
+        override fun doSomething() {
+            // ……
+            println("This is doSomething")
+        }
+//TODO 重写equals和hashCode
+        override fun hashCode(): Int {
+            return super.hashCode()
+        }
+
+        override fun equals(other: Any?): Boolean {
+            return super.equals(other)
+        }
+        override fun sleep() {
+        // ……
+            println("This is sleep")
+        }
+    }
+    myObject.doSomething()
+
+    //TODO when 表达式
+    println(""+ transform("Red"))
+    println(""+ transform("Read"))
 }
