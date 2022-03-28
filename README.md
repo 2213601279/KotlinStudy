@@ -450,6 +450,18 @@ println("$name, $age years of age") // 输出 "Jane, 35 years of age"
 >
 >
 
+# 枚举类型
+
+>1. Defines an enum class with a property and a method. 用属性和方法定义枚举类
+>2. Each enum constant must pass an argument for the constructor parameter. 每个枚举常数必须为构造函数参数传递一个参数
+>3. Enum class members are separated from the constant definitions by a semicolon. 枚举类成员与常量定义之间用分号隔开
+>4. The default 默认`toString` returns the name of the constant, here 返回这个常量的名称`"RED"`.
+>5. Calls a method on an enum constant. 调用枚举常数上的方法
+>6. Calls a method via enum class name. 通过枚举类名调用方法
+>7. The RGB values of 的 RGB 值`RED` and 及`YELLOW` share first bits ( 共享第一位`FF`) so this prints 'true'. )所以这打印’真实’
+
+
+
 
 
 # Java 与 Kotlin 中的字符串

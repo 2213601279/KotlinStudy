@@ -21,6 +21,8 @@ enum class Color(val rgb: Int) {                      // 1
 
     fun containsRed() = (this.rgb and 0xFF0000 != 0)  // 3
 }
+
+
 fun main() {
     val state = State.RUNNING                         // 2
   //TODO 从而 会自动的表示
