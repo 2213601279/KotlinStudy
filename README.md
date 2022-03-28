@@ -340,7 +340,7 @@ fun main() {
 }
 ```
 
-## 数据类
+# 数据类
 
 > [数据类 · Kotlin 官方文档 中文版 (kotlincn.net)](https://book.kotlincn.net/text/data-classes.html)
 
@@ -436,6 +436,21 @@ println("$name, $age years of age") // 输出 "Jane, 35 years of age"
 ### 标准数据类
 
 标准库提供了 `Pair` 与 `Triple` 类。尽管在很多情况下具名数据类是更好的设计选择， 因为它们通过为属性提供有意义的名称使代码更具可读性。
+
+>1. Defines a data class with the 属性定义数据类`data` modifier. 修饰语
+>2. Override the default 覆盖默认值`equals` method by declaring users equal if they have the same 方法，如果用户具有相同的值，则声明用户相等`id`.
+>3. Method 方法`toString` is auto-generated, which makes 是自动生成的`println` output look nice. 输出看起来不错
+>4. Our custom 我们的风俗`equals` considers two instances equal if their 认为两个情况相等，如果他们的`id`s are equal. S 是相等的
+>5. Data class instances with exactly matching attributes have the same 具有完全匹配属性的数据类实例具有相同的属性`hashCode`.
+>6. Auto-generated 自动生成`copy` function makes it easy to create a new instance. 函数使创建新实例变得容易
+>7. `copy` creates a new instance, so the object and its copy have distinct references. 创建一个新实例，因此对象及其副本具有不同的引用
+>8. When copying, you can change values of certain properties. 复制时，可以更改某些属性的值`copy` accepts arguments in the same order as the class constructor. 接受与类构造函数相同顺序的参数
+>9. Use 使用`copy` with named arguments to change the value despite of the properties order. 使用命名参数来更改值，尽管属性顺序不同
+>10. Auto-generated 自动生成`componentN` functions let you get the values of properties in the order of declaration. 函数让你按声明的顺序得到属性的值
+>
+>
+
+
 
 # Java 与 Kotlin 中的字符串
 
