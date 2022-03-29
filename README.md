@@ -460,8 +460,6 @@ println("$name, $age years of age") // 输出 "Jane, 35 years of age"
 >6. Calls a method via enum class name. 通过枚举类名调用方法
 >7. The RGB values of 的 RGB 值`RED` and 及`YELLOW` share first bits ( 共享第一位`FF`) so this prints 'true'. )所以这打印’真实’
 
-
-
 # 密封类
 
 > 限制继承的使用
@@ -498,7 +496,7 @@ fun main() {
 10. The `else`-case is not necessary here since all possible subclasses of the sealed class are covered. With a non-sealed superclass `else` would be required.
 11. 这里不需要 else-case，因为已经包含了密封类的所有可能的子类。如果是非密封的超类，则需要其他类。
 
-# 对象表达式
+## 对象表达式
 
 1. Creates a function with parameters. 创建带有参数的函数
 2. Creates an object to use when calculating the result value.
@@ -528,6 +526,17 @@ fun main(){
     rentPrice(10,2,1)
 }
 ```
+
+## 伴侣对象
+
+
+
+1. Defines a class. 定义一个类
+2. Defines a companion. Its name can be omitted.
+3. 定义一个同伴。它的名称可以省略。
+4. Defines a companion object method. 定义一个伴随对象方法
+5. Calls the companion object method via the class name.
+6. 通过类名调用伴随对象方法。
 
 
 
