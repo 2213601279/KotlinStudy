@@ -462,6 +462,73 @@ println("$name, $age years of age") // 输出 "Jane, 35 years of age"
 
 
 
+# 密封类
+
+> 限制继承的使用
+>
+> 密封类允许您限制继承的使用。一旦声明了一个类密封，它只能从声明密封类的同一个包中进行子类化。它不能在声明密封类的包之外被子类化。
+
+```kotlin
+sealed class Mammal(val name: String)                                                   // 1
+
+class Cat(val catName: String) : Mammal(catName)                                        // 2
+class Human(val humanName: String, val job: String) : Mammal(humanName)
+
+fun greetMammal(mammal: Mammal): String {
+    when (mammal) {                                                                     // 3
+        is Human -> return "Hello ${mammal.name}; You're working as a ${mammal.job}"    // 4
+        is Cat -> return "Hello ${mammal.name}"                                         // 5     
+    }                                                                                   // 6
+}
+
+fun main() {
+    println(greetMammal(Cat("Snowy")))
+}
+```
+
+1. Defines a sealed class. 定义一个密封类
+2. Defines subclasses. Note that all subclasses must be in the same package.
+3. 定义子类。注意所有子类必须在同一个包中。
+4. Uses an instance of the sealed class as an argument in a `when` expression.
+5. 在 when 表达式中将密封类的实例用作参数。
+6. A smartcast is performed, casting `Mammal` to `Human`.
+7. 进行智能铸造，从哺乳动物铸造到人类。
+8. A smartcast is performed, casting `Mammal` to `Cat`.
+9. 执行 smartcast，从哺乳动物到猫。
+10. The `else`-case is not necessary here since all possible subclasses of the sealed class are covered. With a non-sealed superclass `else` would be required.
+11. 这里不需要 else-case，因为已经包含了密封类的所有可能的子类。如果是非密封的超类，则需要其他类。
+
+# 对象表达式
+
+1. Creates a function with parameters. 创建带有参数的函数
+2. Creates an object to use when calculating the result value.
+3. 创建在计算结果值时使用的对象。
+4. Accesses the object's properties. 访问对象的属性
+5. Prints the result. 打印结果
+6. Calls the function. This is when the object is actually created.
+7. 调用函数。这是在实际创建对象的时候。
+
+下面是对象表达式的一个基本典型用法: 简单的对象/属性结构。在类声明中不需要这样做: 您创建一个对象，声明其成员并在一个函数中访问它。这样的对象通常在 Java 中创建为匿名类实例
+
+```kotlin
+fun rentPrice(standardDays: Int, festivityDays: Int, specialDays: Int): Unit {  //1
+
+    val dayRates = object {                                                     //2
+        var standard: Int = 30 * standardDays
+        var festivity: Int = 50 * festivityDays
+        var special: Int = 100 * specialDays
+    }
+
+    val total = dayRates.standard + dayRates.festivity + dayRates.special       //3
+
+    print("Total price: $$total")                                               //4
+
+} 
+fun main(){
+    rentPrice(10,2,1)
+}
+```
+
 
 
 # Java 与 Kotlin 中的字符串
