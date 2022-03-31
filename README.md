@@ -845,3 +845,776 @@ fun main() {
 
 Learn more about [multiline strings](https://book.kotlincn.net/text/coding-conventions.html#strings).
 
+# 集合类
+
+## Java和Kotlin的对比
+
+集合是一组数量可变的项(可能为零) ，这些项对正在解决的问题非常重要，并且通常对其进行操作。本指南解释和比较了爪哇和 Kotlin 的收集概念和操作。它将帮助您从 Java 迁移到 Kotlin，并以真正的 Kotlin 方式编写代码。
+
+### 对 list、 set、 queue 与 deque 的操作
+
+### Operations on list, set, queue, and deque
+
+| 描述 Description                                             | 共有操作 Shared operation                                 | 更多 Kotlin 替代方式More Kotlin Alternatives                 |
+| ------------------------------------------------------------ | --------------------------------------------------------- | ------------------------------------------------------------ |
+| Add an element or elements 添加一个或多个元素                | `add()`, `addAll()`Add () ，addAll ()                     | Use the [`plusAssign`(`+=`) operator](https://book.kotlincn.net/text/collection-plus-minus.html): `collection += element`, `collection += anotherCollection`.使用 plusAssign (+ =)操作符: collection + = element，collection + = anotherCollection。 |
+| Check whether a collection contains an element or elements检查集合是否包含元素或元素 | `contains()`, `containsAll()`Contains () ，containsAll () | Use the [`in` keyword](https://book.kotlincn.net/text/collection-elements.html#检测元素存在与否) to call `contains()` in the operator form: `element in collection`.使用 in 关键字调用操作符窗体 contains () : element in collection。 |
+| Check whether a collection is empty检查集合是否为空          | `isEmpty()`                                               | Use [`isNotEmpty()`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/is-not-empty.html) to check whether a collection is not empty.使用 isNotEmpty ()检查集合是否为空。 |
+| Remove under a certain condition 在一定条件下移除            | `removeIf()`                                              |                                                              |
+| Leave only selected elements 只保留选定的元素                | `retainAll()`                                             |                                                              |
+| Remove all elements from a collection从集合中移除所有元素    | `clear()`                                                 |                                                              |
+| Get a stream from a collection从集合中获取流                 | `stream()`                                                | Kotlin has its own way to process streams: [sequences](https://book.kotlincn.net/text/java-to-kotlin-collections-guide.html#序列) and methods like [`map()`](https://book.kotlincn.net/text/collection-filtering.html) and [`filter()`](https://book.kotlincn.net/text/java-to-kotlin-collections-guide.html#过滤元素).Kotlin 有自己的处理流的方法: 序列和方法，比如 map ()和 filter ()。 |
+| Get an iterator from a collection从集合中获取迭代器          | `iterator()`                                              |                                                              |
+
+### 对 map 的操作
+
+### Operation on map
+
+| 描述 Description                                             | 共有操作 Shared operation                                    | 更多 Kotlin 替代方式More Kotlin Alternatives                 |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| Add an element or elements 添加一个或多个元素                | `put()`, `putAll()`, `putIfAbsent()`Put () ，puttall () ，putifapsent () | In Kotlin, the assignment `map[key] = value` behaves the same as `put(key, value)`. Also, you may use the [`plusAssign`(`+=`) operator](https://book.kotlincn.net/text/collection-plus-minus.html): `map += Pair(key, value)` or `map += anotherMap`.在 Kotlin，赋值映射[ key ] = value 的行为与 put (key，value)相同。另外，您可以使用 plusAssign (+ =)操作符: map + = Pair (key，value)或 map + = anotherMap。 |
+| Replace an element or elements 替换一个或多个元素            | `put()`, `replace()`, `replaceAll()`Put ()、 replace ()、 replaceAll () | Use the indexing operator `map[key] = value` instead of `put()` and `replace()`.使用索引操作符 map [ key ] = value 而不是 put ()和 replace ()。 |
+| Get an element 获取一个元素                                  | `get()`                                                      | Use the indexing operator to get an element: `map[index]`.使用索引操作符获取元素: map [ index ]。 |
+| Check whether a map contains an element or elements检查映射是否包含元素或元素 | `containsKey()`, `containsValue()`容器 key () ，容器 value () | Use the [`in` keyword](https://book.kotlincn.net/text/collection-elements.html#检测元素存在与否) to call `contains()` in the operator form: `element in map`.使用 in 关键字在操作符形式: map 中的元素中调用 contains ()。 |
+| Check whether a map is empty检查地图是否为空                 | `isEmpty()`                                                  | Use [`isNotEmpty()`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/is-not-empty.html) to check whether a map is not empty.使用 isNotEmpty ()检查映射是否为空。 |
+| Remove an element 删除一个元素                               | `remove(key)`, `remove(key, value)`删除(键) ，删除(键，值)   | Use the [`minusAssign`(`-=`) operator](https://book.kotlincn.net/text/collection-plus-minus.html): `map -= key`.使用 minisassign (- =)操作符: map-= key。 |
+| Remove all elements from a map从地图中移除所有元素           | `clear()`                                                    |                                                              |
+| Get a stream from a map从地图上获取一条小溪                  | `stream()` on entries, keys, or values对条目、键或值执行 stream () |                                                              |
+
+### 仅针对 list 的操作
+
+### List only
+
+| 描述 Description                                       | 共有操作 Shared operation                     | 更多 Kotlin 替代方式More Kotlin Alternatives                 |
+| ------------------------------------------------------ | --------------------------------------------- | ------------------------------------------------------------ |
+| Get an index of an element获取元素的索引               | `indexOf()`                                   |                                                              |
+| Get the last index of an element获取元素的最后一个索引 | `lastIndexOf()`                               |                                                              |
+| Get an element 获取一个元素                            | `get()`                                       | Use the indexing operator to get an element: `list[index]`.使用索引操作符获取元素: list [ index ]。 |
+| Take a sublist 拿一个子列表来说                        | `subList()`                                   |                                                              |
+| Replace an element or elements 替换一个或多个元素      | `set()`, `replaceAll()`Set () ，replaceAll () | Use the indexing operator instead of `set()`: `list[index] = value`.使用索引操作符代替 set () : list [ index ] = value。 |
+
+## 略有不同的操作
+
+## Slightly different operation
+
+### 对任意集合类型的操作
+
+### An operation on an arbitrary collection type
+
+| 描述 Description                                             | Java 爪哇                                                    | Kotlin                                                       |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| Get a collection's size 得到一个系列的大小                   | `size()`                                                     | `count()`, `size`计数() ，大小                               |
+| Get flat access to nested collection elements获取对嵌套集合元素的平面访问 | `collectionOfCollections.forEach(flatCollection::addAll)` or `collectionOfCollections.stream().flatMap().collect()`Foreach (flatCollection: : addAll)或 collections.stream () . flatMap () . collect () | [`flatten()`](https://book.kotlincn.net/text/collection-transformations.html#展平) or [`flatMap()`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/flat-map.html)Flatten ()或 flatMap () |
+| Apply the given function to every element对每个元素应用给定的函数 | `stream().map().collect()`                                   | [`map()`](https://book.kotlincn.net/text/collection-filtering.html) |
+| Apply the provided operation to collection elements sequentially and return the accumulated result按顺序对集合元素应用所提供的操作并返回累积的结果 | `stream().reduce()`                                          | [`reduce()`, `fold()`](https://book.kotlincn.net/text/collection-aggregate.html#fold-与-reduce)[减少，减少，减少](https://book.kotlincn.net/text/collection-aggregate.html#fold-与-reduce) |
+| Group elements by a classifier and count them用分类器对元素进行分组并计数 | `stream().collect(Collectors.groupingBy(classifier, counting()))``Stream () . collect (Collectors.groupingBy (classifier，counting ()))` | [`eachCount()`](https://book.kotlincn.net/text/collection-grouping.html) |
+| Filter by a condition 按条件过滤                             | `stream().filter().collect()`                                | [`filter()`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/filter.html) |
+| Check whether collection elements satisfy a condition检查集合元素是否满足条件 | `stream().noneMatch()`, `stream().anyMatch()`, `stream().allMatch()`Stream () . noneMatch () ，stream () . anyMatch () ，stream () . allMatch () | [`none()`, `any()`, `all()`](https://book.kotlincn.net/text/collection-filtering.html)[没有() ，没有() ，都()](https://book.kotlincn.net/text/collection-filtering.html) |
+| Sort elements 排序元素                                       | `stream().sorted().collect()`                                | [`sorted()`](https://book.kotlincn.net/text/collection-ordering.html#自然顺序) |
+| Take the first N elements 以前 n 个元素为例                  | `stream().limit(N).collect()`                                | [`take(N)`](https://book.kotlincn.net/text/collection-parts.html#take-与-drop) |
+| Take elements with a predicate 使用具有谓词的元素            | `stream().takeWhile().collect()`                             | [`takeWhile()`](https://book.kotlincn.net/text/collection-parts.html#take-与-drop) |
+| Skip the first N elements 跳过前 n 个元素                    | `stream().skip(N).collect()`                                 | [`drop(N)`](https://book.kotlincn.net/text/collection-parts.html#take-与-drop) |
+| Skip elements with a predicate 带有谓词的跳过元素            | `stream().dropWhile().collect()`                             | [`dropWhile()`](https://book.kotlincn.net/text/collection-parts.html#take-与-drop) |
+| Build maps from collection elements and certain values associated with them从集合元素和与它们关联的某些值构建映射 | `stream().collect(toMap(keyMapper, valueMapper))`            | [`associate()`](https://book.kotlincn.net/text/collection-transformations.html#关联) |
+
+To perform all of the operations listed above on maps, you first need to get an `entrySet` of a map.
+
+要执行上面列出的映射中的所有操作，首先需要获得映射的 entrySet。
+
+### 对 list 的操作
+
+### Operation on list
+
+| 描述 Description                                             | Java 爪哇                                                 | Kotlin                                                       |
+| ------------------------------------------------------------ | --------------------------------------------------------- | ------------------------------------------------------------ |
+| Sort a list into natural order将列表按自然顺序排序           | `sort(null)`                                              | `sort()`                                                     |
+| Sort a list into descending order将列表按降序排序            | `sort(comparator)`                                        | `sortDescending()`                                           |
+| Remove an element from a list从列表中删除一个元素            | `remove(index)`, `remove(element)`删除(索引) ，删除(元素) | `removeAt(index)`, `remove(element)` or [`collection -= element`](https://book.kotlincn.net/text/collection-plus-minus.html)removeAt (index)、 remove (element)或 collection-= element |
+| Fill all elements of a list with a certain value用特定的值填充列表的所有元素 | `Collections.fill()`                                      | [`fill()`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/fill.html) |
+| Get unique elements from a list从列表中获取唯一的元素        | `stream().distinct().toList()`                            | [`distinct()`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/distinct.html) |
+
+## Java 标准库中不存在的操作
+
+## Operations that do not exist in the Java standard library
+
+- [`zip()`, `unzip()`](https://book.kotlincn.net/text/collection-transformations.html) – transform a collection.
+- Zip ()、 unzip ()-转换一个集合。
+- [`aggregate()`](https://book.kotlincn.net/text/collection-grouping.html) – group by a condition.
+- 集合()-按条件分组。
+- [`takeLast()`, `takeLastWhile()`, `dropLast()`, `dropLastWhile()`](https://book.kotlincn.net/text/collection-parts.html#take-与-drop) – take or drop elements by a predicate.
+- takeLast ()、 takeLastWhile ()、 dropLast ()、 dropLastWhile ()-通过谓词获取或删除元素。
+- [`slice()`, `chunked()`, `windowed()`](https://book.kotlincn.net/text/collection-parts.html) – retrieve collection parts.
+- Slice () ，chunked () ，windowed ()-retrieve 收集部件。
+- [Plus (`+`) and minus (`-`) operators](https://book.kotlincn.net/text/collection-plus-minus.html) – add or remove elements.
+- 加(+)和减(-)操作符-添加或删除元素。
+
+## 可变性
+
+## Variability
+
+In Java, there are mutable collections:
+
+在 Java 中，有可变的集合:
+
+```java
+// Java
+// This list is mutable!
+public List<Customer> getCustomers() { … }
+```
+
+Partially mutable ones:
+
+部分易变的:
+
+```java
+// Java
+List<String> numbers = Arrays.asList("one", "two", "three", "four");
+numbers.add("five"); // Fails in runtime with `UnsupportedOperationException`
+```
+
+And immutable ones:
+
+还有不可改变的:
+
+```java
+// Java
+List<String> numbers = new LinkedList<>();
+// This list is immutable!
+List<String> immutableCollection = Collections.unmodifiableList(numbers);
+immutableCollection.add("five"); // Fails in runtime with `UnsupportedOperationException`
+```
+
+If you write the last two pieces of code in IntelliJ IDEA, the IDE will warn you that you're trying to modify an immutable object. This code will compile and fail in runtime with `UnsupportedOperationException`. You can't tell whether a collection is mutable by looking at its type.
+
+如果你在 IntelliJ IDEA 中编写了最后两段代码，IDE 会警告你你正在修改一个不可变物件。此代码将在运行时编译和失败，并带有 UnsupportedOperationException。您不能通过查看一个集合的类型来判断它是否可变。
+
+Unlike in Java, in Kotlin you explicitly declare mutable or read-only collections depending on your needs. If you try to modify a read-only collection, the code won't compile:
+
+与 Java 不同，在 Kotlin，您可以根据需要显式声明可变集合或只读集合。如果您尝试修改只读集合，则代码不能编译:
+
+```kotlin
+// Kotlin
+val numbers = mutableListOf("one", "two", "three", "four")
+numbers.add("five")            // This is OK
+val immutableNumbers = listOf("one", "two")
+//immutableNumbers.add("five") // Compilation error - Unresolved reference: add
+```
+
+Read more about immutability on the [Kotlin coding conventions](https://book.kotlincn.net/text/coding-conventions.html#不可变性) page.
+
+在 Kotlin 编码约定页面上阅读更多关于不变性的内容。
+
+## 协变性
+
+## Covariation
+
+In Java, you can't pass a collection with a descendant type to a function that takes a collection of the ancestor type. For example, if `Rectangle` extends `Shape`, you can't pass a collection of `Rectangle` elements to a function that takes a collection of `Shape` elements. To make the code compilable, use the `? extends Shape` type so the function can take collections with any inheritors of `Shape`:
+
+在 Java 中，不能将具有子代类型的集合传递给接受祖先类型集合的函数。例如，如果 Rectangle 扩展了 Shape，则不能将 Rectangle 元素的集合传递给接受 Shape 元素集合的函数。要使代码可编译，请使用？扩展 Shape 类型，这样函数就可以与 Shape 的任何继承者一起使用集合:
+
+```java
+// Java
+class Shape {}
+
+class Rectangle extends Shape {}
+
+public void doSthWithShapes(List<? extends Shape> shapes) {
+/* If using just List<Shape>, the code won't compile when calling
+this function with the List<Rectangle> as the argument as below */
+}
+
+public void main() {
+    var rectangles = List.of(new Rectangle(), new Rectangle());
+    doSthWithShapes(rectangles);
+}
+```
+
+In Kotlin, read-only collection types are [covariant](https://book.kotlincn.net/text/generics.html#型变). This means that if a `Rectangle` class inherits from the `Shape` class, you can use the type `List<Rectangle>` anywhere the `List<Shape>` type is required. In other words, the collection types have the same subtyping relationship as the element types. Maps are covariant on the value type, but not on the key type. Mutable collections aren't covariant – this would lead to runtime failures.
+
+在 Kotlin，只读集合类型是协变的。这意味着，如果一个 Rectangle 类继承自 Shape 类，那么您可以在需要 List < Shape > 类型的任何地方使用 List < Rectangle > 类型。换句话说，集合类型与元素类型具有相同的子类型关系。映射在值类型上是协变的，但在键类型上不是。可变集合不是协变的——这会导致运行时故障。
+
+```kotlin
+// Kotlin
+open class Shape(val name: String)
+
+class Rectangle(private val rectangleName: String) : Shape(rectangleName)
+
+fun doSthWithShapes(shapes: List<Shape>) {
+    println("The shapes are: ${shapes.joinToString { it.name }}")
+}
+
+fun main() {
+    val rectangles = listOf(Rectangle("rhombus"), Rectangle("parallelepiped"))
+    doSthWithShapes(rectangles)
+}
+```
+
+Read more about [collection types](https://book.kotlincn.net/text/collections-overview.html#集合类型)here.
+
+点击这里阅读更多关于集合排版的内容。
+
+## 区间与数列
+
+## Interval and sequence
+
+In Kotlin, you can create intervals using [ranges](https://book.kotlincn.net/text/ranges.html#区间). For example, `Version(1, 11)..Version(1, 30)` includes all of the versions from `1.11` to `1.30`. You can check that your version is in the range by using the `in` operator: `Version(0, 9) in versionRange`.
+
+在 Kotlin，你可以使用 range 创建音程。例如，Version (1,11)。.版本(1,30)包括从1.11到1.30的所有版本。您可以使用 versionRange 中的 in 操作符: Version (0,9)来检查您的版本是否在范围内。
+
+In Java, you need to manually check whether a `Version` fits both bounds:
+
+在 Java 中，你需要手动检查一个版本是否符合两个边界:
+
+```java
+// Java
+class Version implements Comparable<Version> {
+
+    int major;
+    int minor;
+
+    Version(int major, int minor) {
+        this.major = major;
+        this.minor = minor;
+    }
+
+    @Override
+    public int compareTo(Version o) {
+        if (this.major != o.major) {
+            return this.major - o.major;
+        }
+        return this.minor - o.minor;
+    }
+}
+
+public void compareVersions() {
+    var minVersion = new Version(1, 11);
+    var maxVersion = new Version(1, 31);
+
+   System.out.println(
+           versionIsInRange(new Version(0, 9), minVersion, maxVersion));
+   System.out.println(
+           versionIsInRange(new Version(1, 20), minVersion, maxVersion));
+}
+
+public Boolean versionIsInRange(Version versionToCheck, Version minVersion, 
+                                Version maxVersion) {
+    return versionToCheck.compareTo(minVersion) >= 0 
+            && versionToCheck.compareTo(maxVersion) <= 0;
+}
+```
+
+In Kotlin, you operate with a range as a whole object. You don't need to create two variables and compare a `Version` with them:
+
+在 Kotlin，你把一个范围作为一个整体来操作。你不需要创建两个变量并与它们比较一个版本:
+
+```kotlin
+// Kotlin
+class Version(val major: Int, val minor: Int): Comparable<Version> {
+    override fun compareTo(other: Version): Int {
+        if (this.major != other.major) {
+            return this.major - other.major
+        }
+        return this.minor - other.minor
+    }
+}
+
+fun main() {
+    val versionRange = Version(1, 11)..Version(1, 30)
+
+    println(Version(0, 9) in versionRange)
+    println(Version(1, 20) in versionRange)
+}
+```
+
+As soon as you need to exclude one of the bounds, like to check whether a version is greater than or equal to (`>=`) the minimum version and less than (`<`) the maximum version, these inclusive ranges won't help.
+
+一旦您需要排除一个边界，比如检查一个版本是否大于或等于(> =)最小版本和小于(<)最大版本，这些包含范围将不起作用。
+
+## 按照多个维度比较
+
+## It's a multi-dimensional comparison
+
+In Java, to compare objects by several criteria, you may use the [`comparing()`](https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html#comparing-java.util.function.Function-) and [`thenComparingX()`](https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html#thenComparing-java.util.Comparator-) functions from the [`Comparator`](https://docs.oracle.com/javase/8/docs/api/java/util/Comparator.html) interface. For example, to compare people by their name and age:
+
+在 Java 中，要根据几个条件比较对象，可以使用 Comparator 接口中的 comparing ()和 comparingx ()函数。例如，通过名字和年龄来比较人们:
+
+```Java
+class Person implements Comparable<Person> {
+    String name;
+    int age;
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return this.name + " " + age;
+    }
+}
+
+public void comparePersons() {
+    var persons = List.of(new Person("Jack", 35), new Person("David", 30), 
+            new Person("Jack", 25));
+    System.out.println(persons.stream().sorted(Comparator
+            .comparing(Person::getName)
+            .thenComparingInt(Person::getAge)).collect(toList()));
+}
+```
+
+In Kotlin, you just enumerate which fields you want to compare:
+
+在 Kotlin，你只需要列举你想要比较的字段:
+
+```kotlin
+data class Person(
+    val name: String,
+    val age: Int
+)
+
+fun main() {
+    val persons = listOf(Person("Jack", 35), Person("David", 30), 
+        Person("Jack", 25))
+    println(persons.sortedWith(compareBy(Person::name, Person::age)))
+}
+```
+
+## 序列
+
+## Sequence
+
+In Java, you can generate a sequence of numbers this way:
+
+在 Java 中，你可以这样生成一系列数字:
+
+```java
+// Java
+int sum = IntStream.iterate(1, e -> e + 3)
+    .limit(10).sum();
+System.out.println(sum); // Prints 145
+```
+
+In Kotlin, use *[sequences](https://book.kotlincn.net/text/sequences.html)*. Multi-step processing of sequences is executed lazily when possible – actual computing happens only when the result of the whole processing chain is requested.
+
+在 Kotlin，使用序列。在可能的情况下，对序列进行多步处理，只有在要求整个处理链的结果时才进行实际计算。
+
+```kotlin
+fun main() {
+//sampleStart
+    // Kotlin
+    val sum = generateSequence(1) {
+        it + 3
+    }.take(10).sum()
+    println(sum) // Prints 145
+//sampleEnd
+}
+```
+
+Sequences may reduce the number of steps that are needed to perform some filtering operations. See the [sequence processing example](https://book.kotlincn.net/text/sequences.html#序列处理示例), which shows the difference between `Iterable` and `Sequence`.
+
+序列可以减少执行某些筛选操作所需的步骤数。请参阅序列处理示例，该示例显示了 Iterable 和 Sequence 之间的差异。
+
+## 从列表中删除元素
+
+## Deletes an element from the list
+
+In Java, the [`remove()`](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html#remove(int)) function accepts an index of an element to remove.
+
+在 Java 中，remove ()函数接受要删除的元素的索引。
+
+When removing an integer element, use the `Integer.valueOf()` function as the argument for the `remove()` function:
+
+在删除整数元素时，使用 Integer.valueOf ()函数作为 remove ()函数的参数:
+
+```java
+// Java
+public void remove() {
+    var numbers = new ArrayList<>();
+    numbers.add(1);
+    numbers.add(2);
+    numbers.add(3);
+    numbers.add(1);
+    numbers.remove(1); // This removes by index
+    System.out.println(numbers); // [1, 3, 1]
+    numbers.remove(Integer.valueOf(1));
+    System.out.println(numbers); // [3, 1]
+}
+```
+
+In Kotlin, there are two types of element removal: by index with [`removeAt()`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/remove-at.html) and by value with [`remove()`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/remove.html).
+
+在 Kotlin，有两种类型的元素删除: 使用 removeAt ()的索引和使用 remove ()的值。
+
+```kotlin
+fun main() {
+//sampleStart
+    // Kotlin
+    val numbers = mutableListOf(1, 2, 3, 1)
+    numbers.removeAt(0)
+    println(numbers) // [2, 3, 1]
+    numbers.remove(1)
+    println(numbers) // [2, 3]
+//sampleEnd
+}
+```
+
+## 遍历 map
+
+## Traversal map
+
+In Java, you can traverse a map via [`forEach`](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html#forEach(java.util.function.BiConsumer)):
+
+在 Java 中，你可以通过 forEach 遍历地图:
+
+```java
+// Java
+numbers.forEach((k,v) -> System.out.println("Key = " + k + ", Value = " + v));
+```
+
+In Kotlin, use a `for` loop or a `forEach`, similar to Java's `forEach`, to traverse a map:
+
+在 Kotlin，使用 for 循环或 forEach (类似于 Java 的 forEach)来遍历 map:
+
+```kotlin
+// Kotlin
+for ((k, v) in numbers) {
+    println("Key = $k, Value = $v")
+}
+// Or
+numbers.forEach { (k, v) -> println("Key = $k, Value = $v") }
+```
+
+## 获取可能会空的集合的首末元素
+
+## Gets the first and last elements of a potentially empty collection
+
+In Java, you can safely get the first and the last items by checking the size of the collection and using indices:
+
+在 Java 中，您可以通过检查集合的大小和使用索引安全地获得第一个和最后一个项目:
+
+```java
+// Java
+var list = new ArrayList<>();
+//...
+if (list.size() > 0) {
+    System.out.println(list.get(0));
+    System.out.println(list.get(list.size() - 1));
+}
+```
+
+You can also use the [`getFirst()`](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Deque.html#getFirst()) and [`getLast()`](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Deque.html#getLast()) functions for [`Deque`](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Deque.html) and its inheritors:
+
+您还可以为 Deque 及其继承者使用 getFirst ()和 getLast ()函数:
+
+```java
+// Java
+var deque = new ArrayDeque<>();
+//...
+if (deque.size() > 0) {
+    System.out.println(deque.getFirst());
+    System.out.println(deque.getLast());
+}
+```
+
+In Kotlin, there are the special functions [`firstOrNull()`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/first-or-null.html) and [`lastOrNull()`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/last-or-null.html). Using the [`Elvis operator`](https://book.kotlincn.net/text/null-safety.html#elvis-操作符), you can perform further actions right away depending on the result of a function. For example, `firstOrNull()`:
+
+在 Kotlin，有一些特殊的函数 firstOrNull ()和 lastOrNull ()。使用 Elvis 操作符，您可以根据函数的结果立即执行进一步的操作。例如，firstOrNull () :
+
+```kotlin
+// Kotlin
+val emails = listOf<String>() // Might be empty
+val theOldestEmail = emails.firstOrNull() ?: ""
+val theFreshestEmail = emails.lastOrNull() ?: ""
+```
+
+## 由 list 创建 set
+
+## Set is created by list
+
+In Java, to create a [`Set`](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html) from a [`List`](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html), you can use the [`Set.copyOf`](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html#copyOf(java.util.Collection)) function:
+
+在 Java 中，要从 List 创建一个 Set，你可以使用 Set.copyOf)函数:
+
+```java
+// Java
+public void listToSet() {
+    var sourceList = List.of(1, 2, 3, 1);
+    var copySet = Set.copyOf(sourceList);
+    System.out.println(copySet);
+}
+```
+
+In Kotlin, use the function `toSet()`:
+
+在 Kotlin，使用函数 toSet () :
+
+```kotlin
+fun main() {
+//sampleStart
+    // Kotlin
+    val sourceList = listOf(1, 2, 3, 1)
+    val copySet = sourceList.toSet()
+    println(copySet)
+//sampleEnd
+}
+```
+
+## 元素分组
+
+## Element grouping
+
+In Java, you can group elements with the [Collectors](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Collectors.html) function `groupingBy()`:
+
+在 Java 中，可以使用 Collectors 函数 groupingBy ()对元素进行分组:
+
+```Java
+// Java
+public void analyzeLogs() {
+    var requests = List.of(
+        new Request("https://kotlinlang.org/docs/home.html", 200),
+        new Request("https://kotlinlang.org/docs/home.html", 400),
+        new Request("https://kotlinlang.org/docs/comparison-to-java.html", 200)
+    );
+    var urlsAndRequests = requests.stream().collect(
+            Collectors.groupingBy(Request::getUrl));
+    System.out.println(urlsAndRequests);
+}
+```
+
+In Kotlin, use the function [`groupBy()`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/group-by.html):
+
+在 Kotlin，使用函数 groupBy () :
+
+```kotlin
+class Request(
+    val url: String,
+    val responseCode: Int
+)
+
+fun main() {
+//sampleStart
+    // Kotlin
+    val requests = listOf(
+        Request("https://kotlinlang.org/docs/home.html", 200),
+        Request("https://kotlinlang.org/docs/home.html", 400),
+        Request("https://kotlinlang.org/docs/comparison-to-java.html", 200)
+    )
+    println(requests.groupBy(Request::url))
+//sampleEnd
+}
+```
+
+## 过滤元素
+
+## Filter element
+
+In Java, to filter elements from a collection, you need to use the [Stream API](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/package-summary.html). The Stream API has `intermediate` and `terminal` operations. `filter()` is an intermediate operation, which returns a stream. To receive a collection as the output, you need to use a terminal operation, like `collect()`. For example, to leave only those pairs whose keys end with `1` and whose values are greater than `10`:
+
+在 Java 中，要从集合中过滤元素，您需要使用 streamapi。Stream API 具有中间和终端操作。Filter ()是一个中间操作，它返回一个流。要接收集合作为输出，您需要使用终端操作，如 collect ()。例如，只留下键以1结尾且值大于10的对:
+
+```java
+// Java
+public void filterEndsWith() {
+    var numbers = Map.of("key1", 1, "key2", 2, "key3", 3, "key11", 11);
+    var filteredNumbers = numbers.entrySet().stream()
+        .filter(entry -> entry.getKey().endsWith("1") && entry.getValue() > 10)
+        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    System.out.println(filteredNumbers);
+}
+```
+
+In Kotlin, filtering is built into collections, and `filter()` returns the same collection type that was filtered. So, all you need to write is the `filter()` and its predicate:
+
+在 Kotlin，筛选被内置到集合中，filter ()返回与筛选的集合类型相同的集合类型。因此，您所需要写的就是 filter ()及其谓词:
+
+```kotlin
+fun main() {
+//sampleStart
+    // Kotlin
+    val numbers = mapOf("key1" to 1, "key2" to 2, "key3" to 3, "key11" to 11)
+    val filteredNumbers = numbers.filter { (key, value) -> key.endsWith("1") && value > 10 }
+    println(filteredNumbers)
+//sampleEnd
+}
+```
+
+Learn more about [filtering maps](https://book.kotlincn.net/text/map-operations.html#过滤) here.
+
+你可在此了解更多有关过滤地图的资料。
+
+### 按类型过滤元素
+
+### Filter elements by type
+
+In Java, to filter elements by type and perform actions on them, you need to check their types with the [`instanceof`](https://docs.oracle.com/en/java/javase/17/language/pattern-matching-instanceof-operator.html) operator and then do the type cast:
+
+在 Java 中，要按类型过滤元素并对其执行操作，需要使用 instanceof 操作符检查它们的类型，然后进行类型强制转换:
+
+```java
+// Java
+public void objectIsInstance() {
+    var numbers = new ArrayList<>();
+    numbers.add(null);
+    numbers.add(1);
+    numbers.add("two");
+    numbers.add(3.0);
+    numbers.add("four");
+    System.out.println("All String elements in upper case:");
+    numbers.stream().filter(it -> it instanceof String)
+        .forEach( it -> System.out.println(((String) it).toUpperCase()));
+}
+```
+
+In Kotlin, you just call [`filterIsInstance()`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/filter-is-instance.html) on your collection, and the type cast is done by [Smart casts](https://book.kotlincn.net/text/typecasts.html#智能转换):
+
+在 Kotlin，你只需在你的集合上调用 filterIsInstance < needed _ type > () ，类型强制转换由 Smart 类型转换完成:
+
+```kotlin
+// Kotlin
+fun main() {
+//sampleStart
+    // Kotlin
+    val numbers = listOf(null, 1, "two", 3.0, "four")
+    println("All String elements in upper case:")
+    numbers.filterIsInstance<String>().forEach {
+        println(it.uppercase())
+    }
+//sampleEnd
+}
+```
+
+### 检验谓词
+
+### Check predicate
+
+Some tasks require you to check whether all, none, or any elements satisfy a condition. In Java, you can do all of these checks via the [Stream API](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/package-summary.html) functions [`allMatch()`](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html#allMatch(java.util.function.Predicate)), [`noneMatch()`](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html#noneMatch(java.util.function.Predicate)), and [`anyMatch()`](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html#anyMatch(java.util.function.Predicate)):
+
+有些任务要求您检查所有、无或任何元素是否满足条件。在 Java 中，可以通过 Stream API 函数 allMatch ()、 noneMatch ()和 anyMatch ()执行所有这些检查:
+
+```java
+// Java
+public void testPredicates() {
+    var numbers = List.of("one", "two", "three", "four");
+    System.out.println(numbers.stream().noneMatch(it -> it.endsWith("e"))); // false
+    System.out.println(numbers.stream().anyMatch(it -> it.endsWith("e"))); // true
+    System.out.println(numbers.stream().allMatch(it -> it.endsWith("e"))); // false
+}
+```
+
+In Kotlin, the [extension functions](https://book.kotlincn.net/text/extensions.html) `none()`, `any()`, and `all()` are available for every [Iterable](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-iterable/#kotlin.collections.Iterable) object:
+
+在 Kotlin，扩展函数 none ()、 any ()和 all ()对每个 Iterable 对象都可用:
+
+```kotlin
+fun main() {
+//sampleStart
+// Kotlin
+    val numbers = listOf("one", "two", "three", "four")
+    println(numbers.none { it.endsWith("e") })
+    println(numbers.any { it.endsWith("e") })
+    println(numbers.all { it.endsWith("e") })
+//sampleEnd
+}
+```
+
+Learn more about [test predicates](https://book.kotlincn.net/text/collection-filtering.html#检验谓词).
+
+了解关于测试谓词的更多信息。
+
+## 集合转换操作
+
+## Set conversion operation
+
+### 元素合拢
+
+### Element closure
+
+In Java, you can make pairs from elements with the same positions in two collections by iterating simultaneously over them:
+
+在 Java 中，你可以通过同时迭代两个集合中具有相同位置的元素来创建对:
+
+```java
+// Java
+public void zip() {
+    var colors = List.of("red", "brown");
+    var animals = List.of("fox", "bear", "wolf");
+
+    for (int i = 0; i < Math.min(colors.size(), animals.size()); i++) {
+        String animal = animals.get(i);
+        System.out.println("The " + animal.substring(0, 1).toUpperCase()
+               + animal.substring(1) + " is " + colors.get(i));
+   }
+}
+```
+
+If you want to do something more complex than just printing pairs of elements into the output, you can use [Records](https://blogs.oracle.com/javamagazine/post/records-come-to-java). In the example above, the record would be `record AnimalDescription(String animal, String color) {}`.
+
+如果希望执行比仅仅将成对的元素打印到输出中更复杂的操作，可以使用 Records。在上面的例子中，记录是 AnimalDescription (String animal，String color){}。
+
+In Kotlin, use the [`zip()`](https://book.kotlincn.net/text/collection-transformations.html#合拢) function to do the same thing:
+
+在 Kotlin，使用 zip ()函数做同样的事情:
+
+```kotlin
+fun main() {
+//sampleStart
+    // Kotlin
+    val colors = listOf("red", "brown")
+    val animals = listOf("fox", "bear", "wolf")
+
+    println(colors.zip(animals) { color, animal -> 
+        "The ${animal.replaceFirstChar { it.uppercase() }} is $color" })
+//sampleEnd
+}
+```
+
+`zip()` returns the List of [Pair](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-pair/) objects.
+
+Zip ()返回 Pair 对象列表。
+
+> If collections have different sizes, the result of `zip()` is the smaller size. The last elements of the larger collection are not included in the result.
+>
+> 如果集合具有不同的大小，zip ()的结果是更小的大小。较大集合的最后一个元素不包含在结果中。
+>
+> <svg width="24" height="24" fill="#4dbb5f" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-9-9 9 9 0 0 1 9 9zM10.5 7.5A1.5 1.5 0 1 0 12 6a1.5 1.5 0 0 0-1.5 1.5zm-.5 3.54v1h1V18h2v-6a.96.96 0 0 0-.96-.96z"></path></svg>
+
+### 元素关联
+
+### Element Association
+
+In Java, you can use the [Stream API](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/package-summary.html) to associate elements with characteristics:
+
+在 Java 中，你可以使用 Stream API 来关联元素和特征:
+
+```java
+// Java
+public void associate() {
+    var numbers = List.of("one", "two", "three", "four");
+    var wordAndLength = numbers.stream()
+        .collect(toMap(number -> number, String::length));
+    System.out.println(wordAndLength);
+}
+```
+
+In Kotlin, use the [`associate()`](https://book.kotlincn.net/text/collection-transformations.html#关联) function:
+
+在 Kotlin，使用 associate ()函数:
+
+```kotlin
+fun main() {
+//sampleStart
+    // Kotlin
+    val numbers = listOf("one", "two", "three", "four")
+    println(numbers.associateWith { it.length })
+//sampleEnd
+}
+```
