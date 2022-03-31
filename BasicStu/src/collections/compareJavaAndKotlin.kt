@@ -1,23 +1,1 @@
-package collections
-
-/**
- *
- * @author Hariji
- * @date 2022-03-31 15:58
- * @description：三尺秋水尘不染
- */
-//TODO list 集合操作
-// 和Java对比 主要有list，set，queue，deque
-fun main() {
-    //TODO ListOf用法
-    val listTest = mutableListOf<String>("a", "b", "c", "d", "e")
-    //后续使用api方法 添加 集合
-    //TODO Java版本的添加集合
-    listTest.add("c")
-    println("This is add a element: "+listTest)
-    println("All in all : "+listTest.addAll(listTest))
-    //TODO Kotlin add
-    listTest += "aaaaa"
-    println("This is Kotlin add use operator : "+listTest)
-
-}
+package collections/** * * @author Hariji * @date 2022-03-31 15:58 * @description：三尺秋水尘不染 *///TODO list 集合操作// 和Java对比 主要有list，set，queue，dequefun main() {    //TODO ListOf用法    val listTest = mutableListOf<String>("a", "b", "c", "d", "e")    //后续使用api方法 添加 集合    //TODO Java版本的添加集合    listTest.add("c")    println("This is add a element: "+listTest)    println("All in all : "+listTest.addAll(listTest))    //TODO Kotlin add    listTest += "aaaaa"    println("This is Kotlin add use operator : "+listTest)    //TODO Kotlin remove    listTest -= "a"    println("remove a "+listTest)    //TODO 判断集合是否有某个元素    // Java使用 containsKey  or contains 方法api 实现（略纯）    // Kotiln 使用lambda 表达式的 in 关键字实现判断（优）    //example Compare    println(listTest.contains("a"))    println( "ab" in listTest)    //TODO 用数组的方式来实例化集合    println(listTest[5])    println(listTest.get(6))    //TODo 替换元素    listTest[6]="ccccccc"    println(listTest)//TODO 操作集合类型的方法    //大小的规定    println(listTest.size)    /*    * none(), any(), all()    * 没有() ，没有() ，都()    * */    println(listTest.none())}
